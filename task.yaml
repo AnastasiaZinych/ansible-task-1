@@ -1,1 +1,45 @@
-mvmvmvhmhvmvhmvh
+- name: Ansible task
+  hosts: centos
+  become: yes
+  tasks:
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+
+    - name: Install Apache 
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start Apache 
+      service:
+        name: httpd
+        state: started
+
+    - name: Download Template
+      get_url:
+        url:  https://www.free-css.com/assets/files/free-css-templates/download/page294/primecare.zip
+        dest: /tmp/
+
+    - name: Install unzip 
+      yum:
+        name: unzip
+        state: present
+
+    - name: Extract Zip Template
+      unarchive:
+        src: /tmp/primecare.zip
+        dest: /var/www/html/
+        remote_src: yes
+
+    - name: Fix file permissions
+      file:
+        path: /var/www/html/
+        owner: root
+        group: root
+        mode: '1777'
+
+
+
+    
+
